@@ -2,7 +2,7 @@
 // @name        네이버 부동산 테이블 뷰
 // @namespace   Violentmonkey Scripts
 // @match       https://new.land.naver.com/complexes*
-// @version     0.1.5
+// @version     0.1.6
 // @author      Maru
 // @description Please use with violentmonkey
 // @require     https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js
@@ -56,10 +56,10 @@ function observeItems() {
     itemNodes.forEach(itemNode => {
         try {
             let item = new Item();
-            item.type = getInnerText('.price_line .type');
-            item.dong = getInnerText('.item_title .text').split(' ')[1];
+            item.type = getInnerText(itemNode, '.price_line .type');
+            item.dong = getInnerText(itemNode, '.item_title .text').split(' ')[1];
         
-            let price = getInnerText('.price_line .price');
+            let price = getInnerText(itemNode, '.price_line .price');
             let prices = price.split("/");
             item.price = prices[0];
             if (prices.length > 1) {
@@ -68,14 +68,14 @@ function observeItems() {
                 item.monthly = "";
             }
         
-            let specs = getInnerText('.info_area .line:nth-child(1) .spec').split(', ');
+            let specs = getInnerText(itemNode, '.info_area .line:nth-child(1) .spec').split(', ');
             item.area = specs[0];
             item.floor = specs[1];
             item.direction = specs[2];
         
-            item.desc = getInnerText('.info_area .line:nth-child(2) .spec');
-            item.realEstate = getInnerText('.agent_info:nth-child(2) .agent_name');
-            item.date = getInnerText('.label_area .label .data');
+            item.desc = getInnerText(itemNode, '.info_area .line:nth-child(2) .spec');
+            item.realEstate = getInnerText(itemNode, '.agent_info:nth-child(2) .agent_name');
+            item.date = getInnerText(itemNode, '.label_area .label .data');
         
             let key = item.key();
             if (!items.has(key)) {
