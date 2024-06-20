@@ -83,7 +83,7 @@ function observeItems() {
                 dirty = true;
             }
         } catch(e) {
-           log.error(e);
+           console.error(e);
         }
     });
 }
