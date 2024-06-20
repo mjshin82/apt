@@ -76,6 +76,10 @@ function observeItems() {
             item.desc = getInnerText(itemNode, '.info_area .line:nth-child(2) .spec');
             item.realEstate = getInnerText(itemNode, '.agent_info:nth-child(2) .agent_name');
             item.date = getInnerText(itemNode, '.label_area .label .data');
+
+            if (item.date === '') {
+                return;
+            }
         
             let key = item.key();
             if (!items.has(key)) {
