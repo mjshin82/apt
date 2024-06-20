@@ -2,7 +2,7 @@
 // @name        네이버 부동산 테이블 뷰
 // @namespace   Violentmonkey Scripts
 // @match       https://new.land.naver.com/complexes*
-// @version     0.1.2
+// @version     0.1.3
 // @author      Maru
 // @description Please use with violentmonkey
 // @require     https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js
@@ -54,32 +54,36 @@ function observeItems() {
     console.log(`item count: ${itemNodes.length}`);
 
     itemNodes.forEach(itemNode => {
-        let item = new Item();
-        item.type = itemNode.querySelector('.price_line .type').innerText;
-        item.dong = itemNode.querySelector('.item_title .text').innerText.split(' ')[1];
-    
-        let price = itemNode.querySelector('.price_line .price').innerText;
-        let prices = price.split("/");
-        item.price = prices[0];
-        if (prices.length > 1) {
-            item.monthly = prices[1];
-        } else {
-            item.monthly = "";
-        }
-    
-        let specs = itemNode.querySelector('.info_area .line:nth-child(1) .spec').innerText.split(', ');
-        item.area = specs[0];
-        item.floor = specs[1];
-        item.direction = specs[2];
-    
-        item.desc = itemNode.querySelector('.info_area .line:nth-child(2) .spec').innerText;
-        item.realEstate = itemNode.querySelector('.agent_info:nth-child(2) .agent_name').innerText;
-        item.date = itemNode.querySelector('.label_area .label .data').innerText;
-    
-        let key = item.key();
-        if (!items.has(key)) {
-            items.set(key, item);
-            dirty = true;
+        try {
+            let item = new Item();
+            item.type = itemNode.querySelector('.price_line .type').innerText;
+            item.dong = itemNode.querySelector('.item_title .text').innerText.split(' ')[1];
+        
+            let price = itemNode.querySelector('.price_line .price').innerText;
+            let prices = price.split("/");
+            item.price = prices[0];
+            if (prices.length > 1) {
+                item.monthly = prices[1];
+            } else {
+                item.monthly = "";
+            }
+        
+            let specs = itemNode.querySelector('.info_area .line:nth-child(1) .spec').innerText.split(', ');
+            item.area = specs[0];
+            item.floor = specs[1];
+            item.direction = specs[2];
+        
+            item.desc = itemNode.querySelector('.info_area .line:nth-child(2) .spec').innerText;
+            item.realEstate = itemNode.querySelector('.agent_info:nth-child(2) .agent_name').innerText;
+            item.date = itemNode.querySelector('.label_area .label .data').innerText;
+        
+            let key = item.key();
+            if (!items.has(key)) {
+                items.set(key, item);
+                dirty = true;
+            }
+        } catch(e) {
+           log.error(e);
         }
     });
 }
